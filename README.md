@@ -59,47 +59,6 @@ This robust ETL foundation will serve as the backbone for upcoming phases, inclu
 
 ---
 
-## 🚀 ETL Daily Progress Streak Tracker
-
-Track your daily ETL progress, streaks, and next tasks in a **fun, visual way**!  
-
-### 📅 Progress Overview
-
-| Date       | ✅ Completed Today                      | ⏳ Next Task                        
-|------------|---------------------------------------|-----------------------------------|
-| 2025-09-18 | CSV ingestion & schema sanitization    | Handle duplicates & EXCEPT ALL     
-| 2025-09-19 | Duplicate check alignment              | Metadata insertion                  
-| 2025-09-20 | Metadata insertion                     | REST API ingestion module           
-| 2025-09-21 | REST API ingestion                     | Load modes implementation           
-
----
-
-### 🎨 How to Use
-
-1. Add a **new row** for each day.  
-2. Fill in **✅ Completed Today** with tasks you finished.  
-3. Fill in **⏳ Next Task** with tasks planned for tomorrow.  
-4. Increment the **Streak** manually.  
-5. Update **Progress bar** to visually reflect completion % (e.g., ▓ for done, ░ for remaining).  
-
----
-
-### 🔥 Streak & Progress Legend
-
-- ✅ Completed Today → Finished tasks  
-- ⏳ Next Task → Tasks planned for next session  
-- 1️⃣, 2️⃣, 3️⃣ ... → Consecutive day streak  
-- ▓ = 10% completed, ░ = 10% remaining (customizable for your milestone goals)
-
----
-
-### 🏆 Optional Visual Enhancements
-
-- Add emojis for milestones: 🟢 for major task done, 🔵 for minor task done  
-- Add color-coded progress bars if your Markdown viewer supports HTML:  
-
-```html
-   <div style="background:#ddd; width:200px; border-radius:5px;">
-   <div style="width:40%; background:#4CAF50; height:16px; border-radius:5px;"></div>
-   </div>
-```
+<!-- STREAK START -->
+[![](STREAK.md)]
+<!-- STREAK END -->

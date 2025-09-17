@@ -1,40 +1,36 @@
-name: Update Streak
+name: Update Streak Tracker
 
 on:
   push:
     branches:
-      - main  # or your working branch
+      - main  # or your default branch
 
 jobs:
   update-streak:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Get last 4 commits
-        id: commits
-        run: |
-          echo "LAST_COMMITS<<EOF" >> $GITHUB_ENV
-          git log -4 --pretty=format:"- %cd : %s" --date=short >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
 
-      - name: Update STREAK.md
+      - name: Install dependencies
         run: |
-          echo "## 📈 ETL Daily Streak Tracker" > STREAK.md
-          echo "" >> STREAK.md
-          echo "Last 4 commits:" >> STREAK.md
-          echo "\`\`\`" >> STREAK.md
-          cat <<EOF >> STREAK.md
-$LAST_COMMITS
-EOF
-          echo "\`\`\`" >> STREAK.md
+          pip install PyGithub
 
-      - name: Commit & Push
+      - name: Generate streak
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          python .github/workflows/update_streak.py
+
+      - name: Commit updated README
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
           git add STREAK.md
-          git commit -m "Update streak tracker"
+          git commit -m "Update streak tracker 🌟" || echo "No changes to commit"
           git push
