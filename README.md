@@ -56,3 +56,48 @@ This robust ETL foundation will serve as the backbone for upcoming phases, inclu
 - Real-time streaming pipelines.  
 - AI-assisted query generation.  
 - Web-based dashboard for data interaction.  
+
+---
+
+## 📊 Phase 1 — ETL Progress Tracker
+
+| Task | Status | Notes |
+|------|--------|-------|
+| Read CSV into PySpark DataFrame with schema inference | ✅ Done | Successfully loaded CSV, counted rows and columns |
+| Standardize column names (snake_case, lowercase) | ✅ Done | Sanitized all headers |
+| Handle duplicates and null values | ✅ Done | EXCEPT ALL approach implemented, nulls counted |
+| Dynamic PostgreSQL table creation | ✅ Done | Table created if not exists with inferred schema |
+| EXCEPT ALL duplicate check | 🔄 In Progress | Needs column alignment with existing table |
+| Metadata insertion for new datasets | 🔄 In Progress | Schema JSON + null counts insertion pending |
+| Support REST API ingestion (streaming) | ⏳ Next | Design ingestion module and connector |
+| Add configurable load modes (overwrite, append, upsert) | ⏳ Next | Implement in PySpark JDBC write |
+| Enhance schema validation & logging | ⏳ Next | Validate schema changes, log mismatches |
+| Partitioning/indexing strategies in PostgreSQL | ⏳ Next | Consider performance optimization |
+
+---
+
+### ✅ Legend
+- ✅ Done  
+- 🔄 In Progress  
+- ⏳ Next  
+
+---
+
+### 📝 Daily Update Template
+
+**Date:** YYYY-MM-DD  
+
+- ✅ Completed Today:  
+  - [Task description]  
+- 🔄 In Progress:  
+  - [Task description]  
+- ⏳ Next Tasks:  
+  - [Task description]  
+
+**Notes / Observations:**  
+- [Any blockers or observations]
+
+---
+
+### 🌟 Overall Progress Badge
+![Progress](https://img.shields.io/badge/Progress-40%25-yellow)
