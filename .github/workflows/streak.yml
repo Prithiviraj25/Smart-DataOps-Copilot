@@ -1,0 +1,40 @@
+name: Update Streak
+
+on:
+  push:
+    branches:
+      - main  # or your working branch
+
+jobs:
+  update-streak:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Get last 4 commits
+        id: commits
+        run: |
+          echo "LAST_COMMITS<<EOF" >> $GITHUB_ENV
+          git log -4 --pretty=format:"- %cd : %s" --date=short >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Update STREAK.md
+        run: |
+          echo "## 📈 ETL Daily Streak Tracker" > STREAK.md
+          echo "" >> STREAK.md
+          echo "Last 4 commits:" >> STREAK.md
+          echo "\`\`\`" >> STREAK.md
+          cat <<EOF >> STREAK.md
+$LAST_COMMITS
+EOF
+          echo "\`\`\`" >> STREAK.md
+
+      - name: Commit & Push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add STREAK.md
+          git commit -m "Update streak tracker"
+          git push
