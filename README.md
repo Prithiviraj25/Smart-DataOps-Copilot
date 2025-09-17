@@ -98,7 +98,8 @@ Track your daily ETL progress, streaks, and next tasks in a **fun, visual way**!
 - Add emojis for milestones: 🟢 for major task done, 🔵 for minor task done  
 - Add color-coded progress bars if your Markdown viewer supports HTML:  
 
-```html
-<div style="background:#ddd; width:200px; border-radius:5px;">
-  <div style="width:40%; background:#4CAF50; height:16px; border-radius:5px;"></div>
-</div>
+```
+   <div style="background:#ddd; width:200px; border-radius:5px;">
+   <div style="width:40%; background:#4CAF50; height:16px; border-radius:5px;"></div>
+   </div>
+```
