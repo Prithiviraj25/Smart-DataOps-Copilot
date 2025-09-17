@@ -58,7 +58,5 @@ This robust ETL foundation will serve as the backbone for upcoming phases, inclu
 - Web-based dashboard for data interaction.  
 
 ---
-
-<!-- STREAK START -->
-[![](STREAK.md)]
-<!-- STREAK END -->
+### My Recent Streaks
+[See latest streak commits](STREAK.md)
