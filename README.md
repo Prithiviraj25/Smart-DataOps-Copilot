@@ -57,6 +57,4 @@ This robust ETL foundation will serve as the backbone for upcoming phases, inclu
 - AI-assisted query generation.  
 - Web-based dashboard for data interaction.  
 
----
-### My Recent Streaks
-[See latest streak commits](STREAK.md)
+ 
