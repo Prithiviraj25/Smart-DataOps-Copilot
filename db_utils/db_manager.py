@@ -3,6 +3,7 @@ from psycopg2.extras import execute_values
 from dotenv import load_dotenv
 import os
 import logging
+import json
 load_dotenv()
 
 #--- Setting up logging
@@ -17,20 +18,13 @@ logging.basicConfig(
 )
 logger = logging.getLogger("db_manager")
 
-POSTGRES_CONFIG = {
-    "host": os.getenv("PGSQL_HOST"),
-    "port": os.getenv("PGSQL_PORT", "5432"),
-    "dbname": os.getenv("PGSQL_DBNAME"),
-    "user": os.getenv("PGSQL_USER"),
-    "password": os.getenv("PGSQL_PASSWORD")
-}
 
 #--- Function to get a connection to the PostgreSQL database
 def get_connection():
     '''function to connect to the Database'''
     try:
-        connection=psycopg2.connect(**POSTGRES_CONFIG)
-        logger.infor("db_utils/db_manager.py:  get_connection: Successfully connected to the database")
+        connection=psycopg2.connect(os.getenv("PGSQL_URL"))
+        logger.info("db_utils/db_manager.py:  get_connection: Successfully connected to the database")
         return connection
     except Exception as e:
         logger.error(f"db_utils/db_manager.py:  get_connection: Error connecting to the database: {e}")
@@ -74,7 +68,7 @@ def insert_metadata(dataset_id, table_name, row_count, schema, null_counts):
                             SET row_count = EXCLUDED.row_count,
                                 schema = EXCLUDED.schema,
                                 null_counts = EXCLUDED.null_counts;
-                        """, (dataset_id, table_name, row_count, str(schema), str(null_counts))
+                        """, (dataset_id, table_name, row_count, json.dumps(schema), json.dumps(null_counts))
                     )
         connection.commit()
         cursor.close()
