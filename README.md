@@ -59,45 +59,46 @@ This robust ETL foundation will serve as the backbone for upcoming phases, inclu
 
 ---
 
-## 📊 Phase 1 — ETL Progress Tracker
+## 🚀 ETL Daily Progress Streak Tracker
 
-| Task | Status | Notes |
-|------|--------|-------|
-| Read CSV into PySpark DataFrame with schema inference | ✅ Done | Successfully loaded CSV, counted rows and columns |
-| Standardize column names (snake_case, lowercase) | ✅ Done | Sanitized all headers |
-| Handle duplicates and null values | ✅ Done | EXCEPT ALL approach implemented, nulls counted |
-| Dynamic PostgreSQL table creation | ✅ Done | Table created if not exists with inferred schema |
-| EXCEPT ALL duplicate check | 🔄 In Progress | Needs column alignment with existing table |
-| Metadata insertion for new datasets | 🔄 In Progress | Schema JSON + null counts insertion pending |
-| Support REST API ingestion (streaming) | ⏳ Next | Design ingestion module and connector |
-| Add configurable load modes (overwrite, append, upsert) | ⏳ Next | Implement in PySpark JDBC write |
-| Enhance schema validation & logging | ⏳ Next | Validate schema changes, log mismatches |
-| Partitioning/indexing strategies in PostgreSQL | ⏳ Next | Consider performance optimization |
+Track your daily ETL progress, streaks, and next tasks in a **fun, visual way**!  
+
+### 📅 Progress Overview
+
+| Date       | ✅ Completed Today                      | ⏳ Next Task                        
+|------------|---------------------------------------|-----------------------------------|
+| 2025-09-18 | CSV ingestion & schema sanitization    | Handle duplicates & EXCEPT ALL     
+| 2025-09-19 | Duplicate check alignment              | Metadata insertion                  
+| 2025-09-20 | Metadata insertion                     | REST API ingestion module           
+| 2025-09-21 | REST API ingestion                     | Load modes implementation           
 
 ---
 
-### ✅ Legend
-- ✅ Done  
-- 🔄 In Progress  
-- ⏳ Next  
+### 🎨 How to Use
+
+1. Add a **new row** for each day.  
+2. Fill in **✅ Completed Today** with tasks you finished.  
+3. Fill in **⏳ Next Task** with tasks planned for tomorrow.  
+4. Increment the **Streak** manually.  
+5. Update **Progress bar** to visually reflect completion % (e.g., ▓ for done, ░ for remaining).  
 
 ---
 
-### 📝 Daily Update Template
+### 🔥 Streak & Progress Legend
 
-**Date:** YYYY-MM-DD  
-
-- ✅ Completed Today:  
-  - [Task description]  
-- 🔄 In Progress:  
-  - [Task description]  
-- ⏳ Next Tasks:  
-  - [Task description]  
-
-**Notes / Observations:**  
-- [Any blockers or observations]
+- ✅ Completed Today → Finished tasks  
+- ⏳ Next Task → Tasks planned for next session  
+- 1️⃣, 2️⃣, 3️⃣ ... → Consecutive day streak  
+- ▓ = 10% completed, ░ = 10% remaining (customizable for your milestone goals)
 
 ---
 
-### 🌟 Overall Progress Badge
-![Progress](https://img.shields.io/badge/Progress-40%25-yellow)
+### 🏆 Optional Visual Enhancements
+
+- Add emojis for milestones: 🟢 for major task done, 🔵 for minor task done  
+- Add color-coded progress bars if your Markdown viewer supports HTML:  
+
+```html
+<div style="background:#ddd; width:200px; border-radius:5px;">
+  <div style="width:40%; background:#4CAF50; height:16px; border-radius:5px;"></div>
+</div>
