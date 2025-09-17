@@ -78,3 +78,27 @@ def insert_metadata(dataset_id, table_name, row_count, schema, null_counts):
         logger.error(f"db_utils/db_manager.py:  insert_metadata: Error inserting/updating metadata: {e}")
         raise
         
+#-----function to create a new table for ingested file
+def create_table(table_name: str, schema: dict):
+    try:
+        connection=get_connection()
+        cursor=connection.cursor()
+        # Convert schema dict to column definitions
+        col_defs = ", ".join([f"{col} {dtype}" for col, dtype in schema.items()])
+
+        # SQL for creating table with primary key 'id'
+        cursor.execute(f"""
+        CREATE TABLE IF NOT EXISTS {table_name} (
+            id BIGSERIAL PRIMARY KEY,
+            {col_defs}
+        );
+        """
+        )
+        connection.commit()
+        cursor.close()
+        connection.close()
+        logger.info(f"db_utils/db_manager.py:  create_table: Table name:{table_name} created successfully")
+        return True
+    except Exception as e:  
+        logger.error(f"db_utils/db_manager.py:  create_table: Error creating table {table_name}: {e}")
+        raise
