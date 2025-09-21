@@ -3,8 +3,10 @@ import sys
 import uuid
 import logging
 import json
-from pyspark.sql import SparkSession, DataFrame
 from db_utils.db_manager import insert_metadata,create_table
+from pyspark.sql import DataFrame,SparkSession, DataFrame
+from pyspark.sql.functions import col, trim, when
+from pyspark.sql.types import StringType, IntegerType, LongType, DoubleType, FloatType, BooleanType
 from dotenv import load_dotenv
 
 # ------------------ Load environment ------------------
@@ -48,7 +50,57 @@ def read_existing_table(table_name: str) -> DataFrame:
     except Exception as e:
         logger.warning(f"ingestion/csv_ingest: read_existing_table: Table '{table_name}' does not exist yet: {e}")
         return None
+    
 
+
+def clean_dataframe(df: DataFrame) -> DataFrame:
+    """
+    Clean Spark DataFrame:
+    - Convert empty strings to NULL in all columns
+    - Trim string columns
+    - Drop duplicate rows
+    - Drop rows with NULLs
+    Schema-aware: handles numeric and boolean columns correctly
+    """
+    try:
+        # 1. Convert empty strings to NULL
+        for field in df.schema.fields:
+            col_name = field.name
+            dtype = field.dataType
+
+            if isinstance(dtype, StringType):
+                # Trim strings and convert empty strings to NULL
+                df = df.withColumn(col_name, when(trim(col(col_name)) == "", None).otherwise(trim(col(col_name))))
+            
+            elif isinstance(dtype, IntegerType):
+                # Convert invalid or empty integer strings to NULL
+                df = df.withColumn(col_name, when(~col(col_name).cast("int").isNotNull(), None).otherwise(col(col_name).cast("int")))
+            
+            elif isinstance(dtype, LongType):
+                df = df.withColumn(col_name, when(~col(col_name).cast("bigint").isNotNull(), None).otherwise(col(col_name).cast("bigint")))
+            
+            elif isinstance(dtype, FloatType) or isinstance(dtype, DoubleType):
+                df = df.withColumn(col_name, when(~col(col_name).cast("double").isNotNull(), None).otherwise(col(col_name).cast("double")))
+            
+            elif isinstance(dtype, BooleanType):
+                df = df.withColumn(col_name, when(~col(col_name).cast("boolean").isNotNull(), None).otherwise(col(col_name).cast("boolean")))
+            
+            else:
+                # Fallback for other types
+                df = df.withColumn(col_name, col(col_name))
+
+        # 2. Drop rows with NULL values
+        df = df.na.drop()
+
+        # 3. Drop duplicate rows
+        df = df.dropDuplicates()
+
+        return df
+
+    except Exception as e:
+        logger.error(f"ingestion/csv_ingest: clean_dataframe: Data cleaning failed: {e}")
+        return None
+    
 
 def ingest_csv(file_path: str, table_name: str = None):
     """
@@ -60,7 +112,10 @@ def ingest_csv(file_path: str, table_name: str = None):
         df_new = spark.read.csv(file_path, header=True, inferSchema=True)
         sanitized_cols = [col.replace(" ", "_").lower() for col in df_new.columns]
         df_new = df_new.toDF(*sanitized_cols)
-        logger.info(f"ingestion/csv_ingest: ingest_csv: CSV loaded: {df_new.count()} rows, {len(df_new.columns)} columns")
+        df_new = clean_dataframe(df_new)
+        if(df_new is None):
+            raise Exception("Data cleaning failed.")
+        logger.info(f"ingestion/csv_ingest: ingest_csv: Cleaned CSV loaded: {df_new.count()} rows, {len(df_new.columns)} columns")
 
         # Generate table name if not provided
         if not table_name:
@@ -106,7 +161,7 @@ def ingest_csv(file_path: str, table_name: str = None):
             df_to_write.write \
             .format("jdbc") \
             .option("url", POSTGRES_URL) \
-            .option("dbtable", "test_table") \
+            .option("dbtable", table_name) \
             .option("driver", "org.postgresql.Driver") \
             .mode("append") \
             .save()
